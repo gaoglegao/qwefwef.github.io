@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<link rel="stylesheet" href="/_assets/main.css" />
+
+    <title>(11条消息) 机器学习-数据归一化方法（Normalization Method）_Microstrong-CSDN博客_数据归一化 - 12313</title>
+  </head>
+  <body>
+    <div class="main">
+      <nav class="navigation">
+        <a href="/">12313</a>
+      </nav>
+      <article>
+        <header>
+          <h1 class="article-title">(11条消息) 机器学习-数据归一化方法（Normalization Method）_Microstrong-CSDN博客_数据归一化</h1>
+          <div class="article-info">
+            <div>
+              <span
+                >Created At：<time datetime="1633164118862"
+                  >2021-10-02 16:41</time
+                ></span
+              >
+              <span
+                >Updated At：<time datetime="1633164118862"
+                  >2021-10-02 16:41</time
+                ></span
+              >
+            </div>
+            
+          </div>
+        </header>
+        <div class="article-content markdown-body"><p>我的个人<strong>微信公众号：Microstrong</strong></p>
+<p><strong>微信公众号ID：MicrostrongAI</strong></p>
+<p>**公众号介绍：**Microstrong(小强)同学主要研究机器学习、深度学习、计算机视觉、智能对话系统相关内容，分享在学习过程中的读书笔记！期待您的关注，欢迎一起学习交流进步！</p>
+<p><a title="https://zhuanlan.zhihu.com/Microstrong" href="https://zhuanlan.zhihu.com/Microstrong">知乎专栏：https://zhuanlan.zhihu.com/Microstrong</a></p>
+<p>个人博客：<a title="https://blog.csdn.net/program_developer" href="https://blog.csdn.net/program_developer">https://blog.csdn.net/program_developer</a></p>
+<h2 id="一-出现背景"><a id="t0" class="jop-noMdConv"></a>一、出现背景：</h2>
+<p><img src="/_resources/d0feac37216a4cec89f7610509ee631e.png" /></p>
+<p>从左至右来看，第一个模型是一个线性模型，拟合度很低，也称作欠拟合（Underfitting），不能很好地适应我们的训练集；第三个模型是一个高次方的模型，属于过度拟合，虽然能很好的适应我们的训练数据集，但是在新输入变量进行预测的时候，可能效果会很差。第二个模型可能是刚刚适合我们数据的模型。</p>
+<p><strong>那么问题来了，如果我们发现这样过度拟合的情况，如何处理呢？</strong></p>
+<p><strong>有两种方式：</strong></p>
+<p><strong>1. 丢弃一些不能帮助我们正确预测的特征。采用的方法如下：</strong></p>
+<ul>
+<li>** 手工选择保留哪些特征。**</li>
+<li><strong>使用一些模型选择算法来帮忙降维。（例如PCA等）</strong></li>
+</ul>
+<p><strong>2. 归一化处理</strong></p>
+<ul>
+<li>** 保留所有的特征，但是减少参数的大小（或者是说：减少参数的重要性）**</li>
+</ul>
+<h2 id="二-定义"><a id="t1" class="jop-noMdConv"></a>二、定义：</h2>
+<p>不同的评价指标往往具有不同的量纲（例如：对于评价房价来说量纲指：面积、房价数、楼层等；对于预测某个人患病率来说量纲指：身高、体重等。）和量纲单位（例如：面积单位：平方米、平方厘米等；身高：米、厘米等），这样的情况会影响到数据分析的结果，为了消除指标之间量纲的影响，需要进行数据标准化处理，以解决数据指标之间的可比性。原始数据经过数据标准化处理后，各指标处于同一数量级，适合进行综合对比评价。</p>
+<h2 id="三-优点"><a id="t2" class="jop-noMdConv"></a>三、优点：</h2>
+<p><strong>（1）归一化后加快了梯度下降求最优解的速度。</strong></p>
+<p><strong>（2）归一化有可能提高精度（归一化是让不同维度之间的特征在数值上有一定的比较性）。</strong></p>
+<p><strong>解释（1）加快梯度下降求最优解的速度：</strong></p>
+<p>例子：假定为了预测房子价格，自变量为面积，房间数两个，因变量为房价。</p>
+<p>那么可以得到的公式为：</p>
+<p><img src="/_resources/23271da81adb47a98f14e57a446a1a5a.png" /></p>
+<p>首先我们给出两张图代表数据是否均一化的最优解寻解过程。</p>
+<p><strong>未归一化：</strong></p>
+<p><img src="/_resources/2022482dda8a4428a70f0111565027b4.jpg" /></p>
+<p><strong>归一化之后：</strong></p>
+<p><img src="/_resources/ec06992a47054bdb9c85c6443f865a39.jpg" /></p>
+<p>我们在寻找最优解的过程中也就是在使得损失函数值最小的theta1、theta2。上述两幅图代表的是损失函数的等高线。我们很容易看出，当数据没有归一化的时候，面积数的范围可以从0-1000，房间数的范围一般为0-10，可以看出面积数的取值范围远大于房间数。</p>
+<p><strong>归一化和没有归一化的影响：</strong></p>
+<p>这样造成的影响就是在形成损失函数的时候：</p>
+<p>数据没有归一化的表达式可以为：</p>
+<p><img src="/_resources/759d7cac77ef4667b0eec9215c342bd5.png" /></p>
+<p>造成图像的等高线为类似的椭圆形状，最优解的寻优过程如下图所示：</p>
+<p><img src="/_resources/2022482dda8a4428a70f0111565027b4.jpg" /></p>
+<p>而数据归一化后，损失函数的表达式可以表示为：</p>
+<p><strong><img src="/_resources/af12af8583514d35b3e1b9b17ff29f7d.png" /></strong></p>
+<p>其中变量的前面系数都在【0-1】范围之间，则图像的等高线为类似的圆形形状，最优解的寻优过程如下图所示:</p>
+<p><img src="/_resources/ec06992a47054bdb9c85c6443f865a39.jpg" /></p>
+<p>从上面可以看出，数据归一化后，最优解的寻优过程明显会变得平缓，更容易正确的收敛到最优解。</p>
+<p><strong>解释：</strong>（2）归一化有可能提高精度（归一化是让不同维度之间的特征在数值上有一定的比较性）。****</p>
+<p>一些分类器需要计算样本之间的距离（如欧式距离），例如KNN。如果一个特征值域范围非常大，那么距离计算就主要取决于这个特征，从而与实际情况不符。（比如，这时实际情况是值域范围小的特征更重要）。</p>
+<h2 id="四-两种常用的归一化方法"><a id="t3" class="jop-noMdConv"></a>四、两种常用的归一化方法：</h2>
+<p>（1）min-max标准化</p>
+<p>（2）Z-score标准化方法</p>
+<h3 id="1min-max标准化min-max-normalization线性函数归一化"><a id="t4" class="jop-noMdConv"></a><strong>（1）min-max标准化（Min-Max Normalization）（线性函数归一化）</strong></h3>
+<ul>
+<li><strong>定义：也称为离差标准化，是对原始数据的线性变换，使得结果映射到0-1之间。</strong></li>
+<li><strong>本质：把数变为【0,1】之间的小数。</strong></li>
+<li><strong>转换函数：（X-Min）/(Max-Min)</strong></li>
+<li><strong>如果想要将数据映射到-1,1，则将公式换成：（X-Mean）/(Max-Min)</strong></li>
+</ul>
+<p>**其中：**max为样本数据的最大值，min为样本数据的最小值，Mean表示数据的均值。</p>
+<p><strong>缺陷：<strong>当有新数据加入时，可导致max和min的变化，需要重新定义</strong>。</strong></p>
+<h3 id="20均值标准化z-score-standardization"><a id="t5" class="jop-noMdConv"></a>（2）0均值标准化（Z-score standardization）</h3>
+<ul>
+<li><strong>定义：这种方法给与原始数据的均值（mean）和标准差（standard deviation）进行数据的标准化。经过处理的数据符合标准正态分布，即均值为0，标准差为1.</strong></li>
+<li><strong>本质：把有量纲表达式变成无量纲表达式。</strong></li>
+<li><strong>转换函数：（X-Mean）/(Standard deviation)</strong></li>
+</ul>
+<p><strong>其中，Mean为所有样本数据的均值。Standard deviation为所有样本数据的标准差。</strong></p>
+<h2 id="五-两种归一化方法的使用场景"><a id="t6" class="jop-noMdConv"></a><strong>五、两种归一化方法的使用场景：</strong></h2>
+<p><strong>（1）在分类、聚类算法中，需要使用距离来度量相似性的时候、或者使用PCA技术进行降维的时候，第二种方法(Z-score standardization)表现更好。</strong></p>
+<p><strong>因为：第一种方法(线性变换后)，其协方差产生了倍数值的缩放，因此这种方式无法消除量纲对方差、协方差的影响，对PCA分析影响巨大；同时，由于量纲的存在，使用不同的量纲、距离的计算结果会不同。</strong></p>
+<p><strong>（2）在不涉及距离度量、协方差计算、数据不符合正太分布的时候，可以使用第一种方法或其他归一化方法。比如图像处理中，将RGB图像转换为灰度图像后将其值限定在（0 ，255）的范围。</strong></p>
+<p><strong>因为：第二种归一化方式中，新的数据由于对方差进行了归一化，这时候每个维度的量纲其实已经等价了，每个维度都服从均值为0、方差1的正态分布，在计算距离的时候，每个维度都是去量纲化的，避免了不同量纲的选取对距离计算产生的巨大影响。</strong></p>
+<p><strong>为什么在距离度量计算相似性、PCA中使用第二种方法(Z-score standardization)会更好呢？我们进行了以下的推导分析：</strong></p>
+<p><strong>归一化方法对方差、协方差的影响：假设我们数据为2个维度（X、Y）,首先看均值为0对方差、协方差的影响：</strong></p>
+<p><strong>我们使用Z-score标准化进行计算，我们先不做方差归一化，只做0均值化为:</strong></p>
+<p><strong><img src="/_resources/7a2c5df22f48416fbd0b7c32fcbadf18.png" /></strong></p>
+<p><strong>新数据的协方差为：</strong></p>
+<p><strong><img src="/_resources/e97909a2768a4358a44afaa3da50ae62.png" /></strong></p>
+<p><strong>由于</strong></p>
+<p><strong><img src="/_resources/244b5a1e3a0e41e0a0251a21134568ab.png" /></strong></p>
+<p><strong>因此：</strong></p>
+<p><strong><img src="/_resources/f249124683774477ae39df6264c7017e.png" /></strong></p>
+<p><strong>而原始数据协方差为：</strong></p>
+<p><strong><img src="/_resources/0ee3a48862674ad0bc044cdae23d40c8.png" /><img src="/_resources/2ecd22162f7a406baf4808c9150d526c.png" /></strong></p>
+<p><strong>因此：<img src="/_resources/732ee97bc3bb43d3815db1cf94418ebd.png" /></strong></p>
+<p><strong>做方差归一化后：</strong></p>
+<p><strong><img src="/_resources/94bba9c14cdf4f65a416ebd84c283383.png" />                 <img src="/_resources/a608eb1c57d643eb8805967a9e5dc676.png" /></strong></p>
+<p><strong>方差归一化后的协方差为：</strong></p>
+<p><strong><img src="/_resources/175d72fa0ed04a9bbb05ec804c059688.png" /><img src="/_resources/0d3396f4cd7540c8b3c0938d5d23c3e2.png" /><img src="/_resources/55549ffb5e9b44289bdd30c18a2d9041.png" /><img src="/_resources/85f48fd813cf4903926b841b3e4fe9ea.png" /></strong></p>
+<p><strong>使用Min-Max标准化方法进行计算，为了方便分析，我们只对X维进行线性函数变换</strong></p>
+<p><strong><img src="/_resources/66eff0b3cb9e43da95940f348c7a8dd8.png" /></strong></p>
+<p><strong>计算协方差：</strong></p>
+<p><strong><img src="/_resources/30012958187541319931bf0ad0646547.png" /><img src="/_resources/213aaa11740b4bb8958cc39dd00b6d4b.png" /></strong></p>
+<h2 id="六-总结"><a id="t7" class="jop-noMdConv"></a><strong>六、总结：</strong></h2>
+<p><strong>（1）使用Max-Min标准化后，其协方差产生了倍数值得缩放，因此这种方式无法消除量纲对方差、协方差的影响，对PCA分析影响巨大；同时由于量纲的存在，使用不同的量纲，距离的计算结果会不同。</strong></p>
+<p><strong>（2）在Z-score标准化（0均值标准化）中，新的数据由于对方差进行了归一化，这时候每个维度的量纲其实已经等价了，每个维度都服从均值为0,、方差为1的正态分布，在计算距离的时候，每个维度都是去量纲化的，避免了不同量纲的选取对距离计算产生的巨大影响。</strong></p>
+<p><strong>总的来说，在算法后续计算中，涉及距离度量（聚类分析）或者协方差分析（PCA、LDA等）的，同时数据分布可以近似为状态分布，应当使用0均值化的归一方法。其它应用中，根据具体情况选用合适的归一化方法。</strong></p>
+<h2 id="七-reference"><a id="t8" class="jop-noMdConv"></a><strong>七、Reference：</strong></h2>
+<p><strong>【1】<a title="http://blog.csdn.net/yehui_qy/article/details/53787386" href="http://blog.csdn.net/yehui_qy/article/details/53787386">http://blog.csdn.net/yehui_qy/article/details/53787386</a></strong></p>
+<p><strong>【2】<a title="http://blog.csdn.net/zbc1090549839/article/details/44103801" href="http://blog.csdn.net/zbc1090549839/article/details/44103801">http://blog.csdn.net/zbc1090549839/article/details/44103801</a></strong></p>
+<p><strong>【3】知乎：处理数据时不进行归一化会有什么影响？归一化的作用是什么？什么时候需要归一化？有哪些归一化的方法？ - 忆臻的回答 - 知乎  <a title="https://www.zhihu.com/question/20455227/answer/197897298" href="https://www.zhihu.com/question/20455227/answer/197897298">https://www.zhihu.com/question/20455227/answer/197897298</a></strong></p>
+<p><strong>【4】<a title="http://blog.csdn.net/mysteryhaohao/article/details/51261300" href="http://blog.csdn.net/mysteryhaohao/article/details/51261300">http://blog.csdn.net/mysteryhaohao/article/details/51261300</a></strong></p>
+</div>
+      </article>
+    </div>
+  </body>
+</html>
